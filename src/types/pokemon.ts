@@ -15,10 +15,9 @@ export interface PokemonStats {
 }
 
 export interface PokemonEvolution {
-  next?: [string, string][];
-  prev?: [string, string][];
+  next?: [string, string][]; // Array of [id, method] pairs
+  prev?: [string, string][]; // Array of [id, method] pairs
 }
-
 export type PokemonAbility = [string, string]; // [ability_name, is_hidden_ability]
 
 export interface PokemonProfile {
@@ -62,4 +61,24 @@ export interface PokemonResponse {
   page: number;
   limit: number;
   hasMore: boolean;
+}
+
+
+
+
+export interface EvolutionChainNode {
+  id: number;
+  name: string;
+  image: string;
+  sprite: string;
+  types: string[];
+  evolutionMethod: string | null;
+  evolvesTo: EvolutionChainNode[];
+}
+
+export interface EvolutionChainResponse {
+  pokemonId: number;
+  pokemonName: string;
+  format: 'flat' | 'tree';
+  evolutionChain: EvolutionChainNode[];
 }
