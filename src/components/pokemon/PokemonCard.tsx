@@ -2,7 +2,7 @@ import type { Pokemon } from '@/types/pokemon';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-
+import { useRouter } from 'next/navigation';
 interface PokemonCardProps {
   pokemon: Pokemon;
 }
@@ -29,14 +29,18 @@ const typeColors: Record<string, string> = {
 };
 
 export default function PokemonCard({ pokemon }: PokemonCardProps) {
+  const router = useRouter();
+
+  const handlePokemonClick = (id: string | number) => {
+    router.push(`/pokemon/${id}`);
+  };
   return (
-    <Card className="group hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
-      <CardHeader className="pb-2">
-        <div className="text-sm text-muted-foreground font-mono text-center">
-          #{pokemon.id.toString().padStart(3, '0')}
-        </div>
-      </CardHeader>
-      
+    <Card className="group hover:shadow-lg transition-all duration-200 hover:-translate-y-1 cursor-pointer" onClick={() => handlePokemonClick(pokemon.id)}>      <CardHeader className="pb-2">
+      <div className="text-sm text-muted-foreground font-mono text-center">
+        #{pokemon.id.toString().padStart(3, '0')}
+      </div>
+    </CardHeader>
+
       <CardContent className="pt-0">
         {/* Pokemon Image */}
         <div className="flex justify-center mb-4">
@@ -52,12 +56,12 @@ export default function PokemonCard({ pokemon }: PokemonCardProps) {
             />
           </div>
         </div>
-        
+
         {/* Pokemon Name */}
         <h3 className="text-lg font-bold text-center mb-3">
           {pokemon.name.english}
         </h3>
-        
+
         {/* Pokemon Types */}
         <div className="flex justify-center gap-1 mb-3 flex-wrap">
           {pokemon.type.map((type) => (
@@ -73,31 +77,6 @@ export default function PokemonCard({ pokemon }: PokemonCardProps) {
             </Badge>
           ))}
         </div>
-        
-        {/* Abilities */}
-        {/* <div className="text-center">
-          <p className="text-xs text-muted-foreground mb-1">Abilities</p>
-          <div className="flex justify-center gap-1 flex-wrap">
-            {pokemon.profile.ability.map(([name, isHidden], index) => (
-              <span 
-                key={index} 
-                className={`
-                  text-xs px-2 py-1 rounded
-                  ${isHidden === 'true'
-                    ? 'bg-yellow-100 text-yellow-800 border border-yellow-300' 
-                    : 'bg-muted text-muted-foreground'
-                  }
-                `}
-                title={isHidden === 'true' ? 'Hidden Ability' : 'Normal Ability'}
-              >
-                {name}
-                {isHidden === 'true' && (
-                  <span className="ml-1 text-xs">🔒</span>
-                )}
-              </span>
-            ))}
-          </div>
-        </div> */}
       </CardContent>
     </Card>
   );

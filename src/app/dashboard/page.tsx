@@ -5,6 +5,8 @@ import SearchForm from '@/components/pokemon/SearchForm';
 import PokemonGrid from '@/components/pokemon/PokemonGrid';
 
 export default function HomePage() {
+
+
   const { 
     pokemon, 
     loading, 
