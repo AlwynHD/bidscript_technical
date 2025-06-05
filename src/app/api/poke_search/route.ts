@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 import pokemonData from '@/data/pokedex.json';
 import type { Pokemon, SearchFilters, PokemonResponse } from '@/types/pokemon';
 
-const typedPokemonData = pokemonData as unknown as Pokemon[];
+const typedPokemonData = pokemonData as Pokemon[];
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -11,10 +11,14 @@ export async function GET(request: NextRequest) {
   const page = parseInt(searchParams.get('page') || '1');
   const limit = parseInt(searchParams.get('limit') || '20');
   
+  // Parse multiple types from query params
+  const typesParam = searchParams.get('types');
+  const selectedTypes = typesParam ? typesParam.split(',') : [];
+  
   // Filters
   const filters: SearchFilters = {
     query: searchParams.get('query') || undefined,
-    type: searchParams.get('type') as any || undefined,
+    types: selectedTypes.length > 0 ? selectedTypes as any : undefined,
   };
 
   let filteredPokemon = [...typedPokemonData];
@@ -27,22 +31,27 @@ export async function GET(request: NextRequest) {
       const nameMatch = pokemon.name.english.toLowerCase().includes(query);
       
       // Search in abilities
-      const abilities = pokemon.profile.ability.flatMap(abilityObj => 
-        Object.values(abilityObj).filter(Boolean)
-      );
-      const abilityMatch = abilities.some(ability => 
-        ability.toLowerCase().includes(query)
+      const abilityMatch = pokemon.profile.ability.some(([name]) => 
+        name.toLowerCase().includes(query)
       );
       
       return nameMatch || abilityMatch;
     });
   }
 
-  // Apply type filter
-  if (filters.type) {
-    filteredPokemon = filteredPokemon.filter(pokemon => 
-      pokemon.type.includes(filters.type!)
-    );
+  // Apply multiple type filters
+  if (filters.types && filters.types.length > 0) {
+    filteredPokemon = filteredPokemon.filter(pokemon => {
+      // Check if Pokemon has ALL selected types (AND logic)
+      return filters.types!.every(selectedType => 
+        pokemon.type.includes(selectedType)
+      );
+      
+      // Alternative: Check if Pokemon has ANY selected types (OR logic)
+      // return filters.types!.some(selectedType => 
+      //   pokemon.type.includes(selectedType)
+      // );
+    });
   }
 
   // Calculate pagination

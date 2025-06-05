@@ -19,10 +19,7 @@ export interface PokemonEvolution {
   prev?: [string, string][];
 }
 
-export interface PokemonAbility {
-  0: string;
-  1?: string;
-}
+export type PokemonAbility = [string, string]; // [ability_name, is_hidden_ability]
 
 export interface PokemonProfile {
   height: string;
@@ -56,9 +53,8 @@ export type PokemonType =
   | "Bug" | "Rock" | "Ghost" | "Dragon" | "Dark" | "Steel" | "Fairy";
 
 export interface SearchFilters {
-  query?: string; // searches name and ability
-  type?: PokemonType;
-}
+  query?: string;
+  types?: PokemonType[];}
 
 export interface PokemonResponse {
   pokemon: Pokemon[];

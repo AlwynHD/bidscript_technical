@@ -29,10 +29,6 @@ const typeColors: Record<string, string> = {
 };
 
 export default function PokemonCard({ pokemon }: PokemonCardProps) {
-  const abilities = pokemon.profile.ability.flatMap(abilityObj => 
-    Object.values(abilityObj).filter(Boolean)
-  );
-
   return (
     <Card className="group hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
       <CardHeader className="pb-2">
@@ -79,16 +75,29 @@ export default function PokemonCard({ pokemon }: PokemonCardProps) {
         </div>
         
         {/* Abilities */}
-        <div className="text-center">
+        {/* <div className="text-center">
           <p className="text-xs text-muted-foreground mb-1">Abilities</p>
           <div className="flex justify-center gap-1 flex-wrap">
-            {abilities.slice(0, 2).map((ability, index) => (
-              <span key={index} className="text-xs bg-muted px-2 py-1 rounded">
-                {ability}
+            {pokemon.profile.ability.map(([name, isHidden], index) => (
+              <span 
+                key={index} 
+                className={`
+                  text-xs px-2 py-1 rounded
+                  ${isHidden === 'true'
+                    ? 'bg-yellow-100 text-yellow-800 border border-yellow-300' 
+                    : 'bg-muted text-muted-foreground'
+                  }
+                `}
+                title={isHidden === 'true' ? 'Hidden Ability' : 'Normal Ability'}
+              >
+                {name}
+                {isHidden === 'true' && (
+                  <span className="ml-1 text-xs">🔒</span>
+                )}
               </span>
             ))}
           </div>
-        </div>
+        </div> */}
       </CardContent>
     </Card>
   );
