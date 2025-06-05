@@ -55,9 +55,9 @@ export default function PokemonGrid({
   if (loading) {
     return (
       <div className="space-y-6">
-        <div className="text-sm text-muted-foreground">
+        {/* <div className="text-sm text-muted-foreground">
           Loading Pokemon...
-        </div>
+        </div> */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
           {Array.from({ length: 20 }).map((_, i) => (
             <div key={i} className="space-y-3">
@@ -88,7 +88,7 @@ export default function PokemonGrid({
       {/* Results Count with Auto-Search Indicator */}
       <div className="flex items-center justify-between">
         <div className="text-sm text-muted-foreground">
-          Showing {pokemon.length} of {total} Pokémon
+          {total} Pokémon Loaded
         </div>
         
         {autoSearching && (

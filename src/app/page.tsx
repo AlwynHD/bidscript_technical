@@ -10,7 +10,7 @@ export default function HomePage() {
   const router = useRouter()
 
   const handleExplore = () => {
-    router.push('/pokemon')
+    router.push('/dashboard')
   }
 
   return (

@@ -109,7 +109,7 @@ export default function SearchForm({ onSearch, onReset, loading }: SearchFormPro
                 type="text"
                 value={filters.query || ''}
                 onChange={(e) => handleQueryChange(e.target.value)}
-                placeholder="Search by name or ability... (auto-search)"
+                placeholder="Search by name or ability..."
                 className="pl-10"
               />
             </div>
