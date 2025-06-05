@@ -1,14 +1,14 @@
+import { useEffect, useRef } from 'react';
 import type { Pokemon } from '@/types/pokemon';
 import PokemonCard from './PokemonCard';
-import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ChevronDown, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 interface PokemonGridProps {
   pokemon: Pokemon[];
   loading?: boolean;
   loadingMore?: boolean;
-  autoSearching?: boolean; // New prop
+  autoSearching?: boolean;
   hasMore?: boolean;
   onLoadMore?: () => void;
   total?: number;
@@ -23,6 +23,35 @@ export default function PokemonGrid({
   onLoadMore,
   total = 0
 }: PokemonGridProps) {
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  // Infinite scroll implementation
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel || !hasMore || loadingMore || loading) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Load more when the sentinel comes into view
+        if (entries[0].isIntersecting && onLoadMore) {
+          onLoadMore();
+        }
+      },
+      {
+        // Trigger when sentinel is 100px away from viewport
+        rootMargin: '100px',
+        threshold: 0.1,
+      }
+    );
+
+    observer.observe(sentinel);
+
+    // Cleanup
+    return () => {
+      observer.disconnect();
+    };
+  }, [hasMore, loadingMore, loading, onLoadMore]);
+
   if (loading) {
     return (
       <div className="space-y-6">
@@ -88,19 +117,22 @@ export default function PokemonGrid({
         ))}
       </div>
       
-      {/* Load More Button */}
+      {/* Infinite Scroll Sentinel & Loading Indicator */}
       {hasMore && (
-        <div className="text-center pt-8">
-          <Button
-            onClick={onLoadMore}
-            disabled={loadingMore}
-            variant="outline"
-            size="lg"
-            className="min-w-[200px]"
-          >
-            <ChevronDown className="w-4 h-4 mr-2" />
-            {loadingMore ? 'Loading...' : 'Load More Pokemon'}
-          </Button>
+        <div 
+          ref={sentinelRef}
+          className="flex items-center justify-center py-8"
+        >
+          {loadingMore ? (
+            <div className="flex items-center text-muted-foreground">
+              <Loader2 className="w-5 h-5 animate-spin mr-2" />
+              Loading more Pokemon...
+            </div>
+          ) : (
+            <div className="text-sm text-muted-foreground">
+              Scroll down to load more Pokemon
+            </div>
+          )}
         </div>
       )}
       
@@ -108,7 +140,7 @@ export default function PokemonGrid({
       {loadingMore && (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
           {Array.from({ length: 20 }).map((_, i) => (
-            <div key={i} className="space-y-3">
+            <div key={i} className="space-y-3 animate-in fade-in duration-300">
               <Skeleton className="h-48 w-full rounded-lg" />
               <Skeleton className="h-4 w-3/4 mx-auto" />
               <div className="flex justify-center gap-2">
@@ -117,6 +149,18 @@ export default function PokemonGrid({
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* End of results indicator */}
+      {!hasMore && pokemon.length > 0 && (
+        <div className="text-center py-8">
+          <div className="text-sm text-muted-foreground">
+            🎉 You've seen all {total} Pokemon! 
+          </div>
+          <div className="text-xs text-muted-foreground mt-1">
+            Try adjusting your search to discover more
+          </div>
         </div>
       )}
     </div>
