@@ -10,16 +10,93 @@ typedPokemonData.forEach(pokemon => {
   pokemonMap.set(pokemon.id, pokemon);
 });
 
-// Function to build complete evolution chain
-function buildEvolutionChain(startPokemonId: number): EvolutionChainNode[] {
+// Helper function to normalize evolution data to consistent format
+function normalizeEvolutionData(evolutionData: any): [string, string][] {
+  if (!evolutionData) return [];
+  
+  // If it's already an array of arrays like [["12", "Level 10"]]
+  if (Array.isArray(evolutionData) && evolutionData.length > 0 && Array.isArray(evolutionData[0])) {
+    return evolutionData as [string, string][];
+  }
+  
+  // If it's a single tuple like ["10", "Level 7"]
+  if (Array.isArray(evolutionData) && evolutionData.length === 2 && typeof evolutionData[0] === 'string') {
+    return [evolutionData as [string, string]];
+  }
+  
+  return [];
+}
+
+// Function to find the base pokemon by going backwards through prev
+function findBasePokemon(pokemonId: number, visited = new Set<number>()): Pokemon | null {
+  // Prevent infinite loops
+  if (visited.has(pokemonId)) return null;
+  visited.add(pokemonId);
+
+  const pokemon = pokemonMap.get(pokemonId);
+  if (!pokemon) return null;
+  
+  // Normalize prev evolution data
+  const prevEvolutions = normalizeEvolutionData(pokemon.evolution.prev);
+  
+  // If no prev evolution, this is the base
+  if (prevEvolutions.length === 0) {
+    return pokemon;
+  }
+  
+  // Go to the first previous evolution
+  const [prevIdStr] = prevEvolutions[0];
+  const prevId = parseInt(prevIdStr);
+  return findBasePokemon(prevId, visited);
+}
+
+// Function to build evolution chain by going forward through next
+function buildEvolutionChainFromBase(basePokemonId: number): EvolutionChainNode[] {
+  const chain: EvolutionChainNode[] = [];
   const visited = new Set<number>();
   
-  // Find the base pokemon (the one with no prevolution)
-  const basePokemon = findBasePokemon(startPokemonId);
-  if (!basePokemon) return [];
+  function addToChain(pokemonId: number, evolutionMethod: string | null = null) {
+    // Prevent infinite loops
+    if (visited.has(pokemonId)) return;
+    visited.add(pokemonId);
+    
+    const pokemon = pokemonMap.get(pokemonId);
+    if (!pokemon) return;
+    
+    // Create the node
+    const node: EvolutionChainNode = {
+      id: pokemon.id,
+      name: pokemon.name.english,
+      image: pokemon.image.hires,
+      sprite: pokemon.image.sprite,
+      types: pokemon.type,
+      evolutionMethod: evolutionMethod,
+      evolvesTo: []
+    };
+    
+    chain.push(node);
+    
+    // Normalize next evolution data
+    const nextEvolutions = normalizeEvolutionData(pokemon.evolution.next);
+    
+    // Follow the first next evolution (for linear chain)
+    if (nextEvolutions.length > 0) {
+      const [nextIdStr, nextMethod] = nextEvolutions[0];
+      const nextId = parseInt(nextIdStr);
+      addToChain(nextId, nextMethod);
+    }
+  }
   
-  // Build chain starting from base
-  function buildChainRecursive(pokemonId: number): EvolutionChainNode | null {
+  addToChain(basePokemonId);
+  return chain;
+}
+
+// Function to build tree structure (for complex evolutions like Eevee)
+function buildEvolutionTree(basePokemonId: number): EvolutionChainNode {
+  const visited = new Set<number>();
+  
+  function buildNode(pokemonId: number): EvolutionChainNode | null {
+    // Prevent infinite loops
     if (visited.has(pokemonId)) return null;
     visited.add(pokemonId);
     
@@ -32,83 +109,27 @@ function buildEvolutionChain(startPokemonId: number): EvolutionChainNode[] {
       image: pokemon.image.hires,
       sprite: pokemon.image.sprite,
       types: pokemon.type,
-      evolutionMethod: null,
+      evolutionMethod: null, // Will be set by parent
       evolvesTo: []
     };
     
-    // Add evolution methods and next evolutions
-    if (pokemon.evolution.next) {
-      for (const [nextIdStr, method] of pokemon.evolution.next) {
-        const nextId = parseInt(nextIdStr);
-        const nextNode = buildChainRecursive(nextId);
-        if (nextNode) {
-          nextNode.evolutionMethod = method;
-          node.evolvesTo.push(nextNode);
-        }
+    // Normalize next evolution data
+    const nextEvolutions = normalizeEvolutionData(pokemon.evolution.next);
+    
+    // Add all next evolutions
+    for (const [nextIdStr, method] of nextEvolutions) {
+      const nextId = parseInt(nextIdStr);
+      const childNode = buildNode(nextId);
+      if (childNode) {
+        childNode.evolutionMethod = method;
+        node.evolvesTo.push(childNode);
       }
     }
     
     return node;
   }
   
-  const rootNode = buildChainRecursive(basePokemon.id);
-  return rootNode ? [rootNode] : [];
-}
-
-// Function to find the base pokemon in an evolution line
-function findBasePokemon(pokemonId: number): Pokemon | null {
-  const pokemon = pokemonMap.get(pokemonId);
-  if (!pokemon) return null;
-  
-  // If no prev evolution, this is the base
-  if (!pokemon.evolution.prev || pokemon.evolution.prev.length === 0) {
-    return pokemon;
-  }
-  
-  // Follow the prev evolution chain to find the base
-  // Fix: pokemon.evolution.prev is [string, string][], so we need to get the first tuple, then the first element
-  const firstPrevEvolution = pokemon.evolution.prev[0]; // This gets the [string, string] tuple
-  const [prevIdStr] = firstPrevEvolution; // This destructures the tuple to get the ID
-  const prevId = parseInt(prevIdStr);
-  return findBasePokemon(prevId);
-}
-
-// Function to get flat evolution chain (linear representation)
-function getFlatEvolutionChain(startPokemonId: number): EvolutionChainNode[] {
-  const basePokemon = findBasePokemon(startPokemonId);
-  if (!basePokemon) return [];
-  
-  const flatChain: EvolutionChainNode[] = [];
-  const visited = new Set<number>();
-  
-  function addToFlatChain(pokemonId: number, method: string | null = null) {
-    if (visited.has(pokemonId)) return;
-    visited.add(pokemonId);
-    
-    const pokemon = pokemonMap.get(pokemonId);
-    if (!pokemon) return;
-    
-    const node: EvolutionChainNode = {
-      id: pokemon.id,
-      name: pokemon.name.english,
-      image: pokemon.image.hires,
-      sprite: pokemon.image.sprite,
-      types: pokemon.type,
-      evolutionMethod: method,
-      evolvesTo: []
-    };
-    
-    flatChain.push(node);
-    
-    // Continue with next evolution (take first one for flat chain)
-    if (pokemon.evolution.next && pokemon.evolution.next.length > 0) {
-      const [nextIdStr, nextMethod] = pokemon.evolution.next[0];
-      addToFlatChain(parseInt(nextIdStr), nextMethod);
-    }
-  }
-  
-  addToFlatChain(basePokemon.id);
-  return flatChain;
+  return buildNode(basePokemonId)!;
 }
 
 export async function GET(
@@ -128,19 +149,28 @@ export async function GET(
       return Response.json({ error: 'Pokemon not found' }, { status: 404 });
     }
     
+    // Find the base of the evolution line
+    const basePokemon = findBasePokemon(pokemonId);
+    if (!basePokemon) {
+      return Response.json({ error: 'Could not find base Pokemon' }, { status: 500 });
+    }
+    
     const { searchParams } = new URL(request.url);
     const format = searchParams.get('format') || 'flat';
     
     let evolutionChain;
     if (format === 'tree') {
-      evolutionChain = buildEvolutionChain(pokemonId);
+      const treeRoot = buildEvolutionTree(basePokemon.id);
+      evolutionChain = [treeRoot];
     } else {
-      evolutionChain = getFlatEvolutionChain(pokemonId);
+      evolutionChain = buildEvolutionChainFromBase(basePokemon.id);
     }
     
     return Response.json({
       pokemonId,
       pokemonName: pokemon.name.english,
+      basePokemonId: basePokemon.id,
+      basePokemonName: basePokemon.name.english,
       format,
       evolutionChain
     });

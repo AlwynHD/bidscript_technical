@@ -39,10 +39,10 @@ export default function PokemonDetailPage({
   
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-4">
+      <div className="container mx-auto px-4 py-4 ">
         {/* Back Button */}
-        <div className="mb-4">
-          <Button variant="outline" className="gap-2" size="sm" onClick={() => router.back()}>
+        <div className="mb-4 ">
+          <Button variant="outline" className="gap-2 hover:cursor-pointer" size="sm" onClick={() => router.push('/dashboard')}>
             <ArrowLeft className="w-4 h-4" />
             Back to Pokédex
           </Button>

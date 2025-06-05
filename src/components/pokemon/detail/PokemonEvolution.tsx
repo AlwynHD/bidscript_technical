@@ -51,24 +51,23 @@ export default function PokemonEvolution({ pokemon }: PokemonEvolutionProps) {
     <Card>
       <CardHeader className="pb-2">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-yellow-500" />
           <h2 className="text-lg font-bold">Evolution Chain</h2>
         </div>
       </CardHeader>
       <CardContent className="pt-0">
         {loading ? (
           <div className="space-y-3">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-center gap-2">
               <Skeleton className="w-12 h-12 rounded-full" />
               <Skeleton className="w-4 h-4" />
               <Skeleton className="w-12 h-12 rounded-full" />
             </div>
-            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-4 w-24 mx-auto" />
           </div>
         ) : (
           <div className="space-y-3">
             {/* Evolution Chain Display */}
-            <div className="flex items-center gap-1 overflow-x-auto pb-2">
+            <div className="flex items-center justify-center gap-1 px-2">
               {evolutionChain.map((evo, index) => (
                 <div key={evo.id} className="flex items-center gap-1 flex-shrink-0">
                   {/* Pokemon */}
