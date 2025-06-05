@@ -9,6 +9,7 @@ export default function HomePage() {
     pokemon, 
     loading, 
     loadingMore, 
+    autoSearching, // New state
     error, 
     total, 
     hasMore, 
@@ -32,7 +33,7 @@ export default function HomePage() {
         <SearchForm 
           onSearch={search} 
           onReset={resetSearch} 
-          loading={loading} 
+          loading={loading || autoSearching} // Show loading for both states
         />
 
         {error && (
@@ -45,6 +46,7 @@ export default function HomePage() {
           pokemon={pokemon}
           loading={loading}
           loadingMore={loadingMore}
+          autoSearching={autoSearching} // Pass the new state
           hasMore={hasMore}
           onLoadMore={loadMore}
           total={total}

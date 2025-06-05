@@ -1,16 +1,17 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import type { Pokemon, SearchFilters, PokemonResponse } from '@/types/pokemon';
 
 interface UsePokemonReturn {
   pokemon: Pokemon[];
   loading: boolean;
   loadingMore: boolean;
+  autoSearching: boolean; // New: subtle loading for auto-search
   error: string | null;
   hasMore: boolean;
   total: number;
   currentPage: number;
   loadMore: () => void;
-  search: (filters: SearchFilters) => void;
+  search: (filters: SearchFilters, isManual?: boolean) => void;
   resetSearch: () => void;
 }
 
@@ -18,20 +19,32 @@ export function usePokemon(): UsePokemonReturn {
   const [pokemon, setPokemon] = useState<Pokemon[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [autoSearching, setAutoSearching] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(false);
   const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [activeFilters, setActiveFilters] = useState<SearchFilters>({});
+  
+  // Refs for debouncing
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const isInitialMount = useRef(true);
 
   const fetchPokemon = useCallback(async (
     page: number, 
     filters: SearchFilters = {}, 
-    isNewSearch = false
+    isNewSearch = false,
+    isManual = false
   ) => {
     if (isNewSearch) {
-      setLoading(true);
-      setPokemon([]);
+      if (isManual) {
+        // Manual search - show full loading
+        setLoading(true);
+        setPokemon([]);
+      } else {
+        // Auto search - just show subtle indicator
+        setAutoSearching(true);
+      }
       setCurrentPage(1);
     } else {
       setLoadingMore(true);
@@ -47,7 +60,13 @@ export function usePokemon(): UsePokemonReturn {
       // Add filters to search params
       Object.entries(filters).forEach(([key, value]) => {
         if (value !== undefined && value !== '') {
-          searchParams.append(key, value.toString());
+          if (Array.isArray(value)) {
+            if (value.length > 0) {
+              searchParams.append(key, value.join(','));
+            }
+          } else {
+            searchParams.append(key, value.toString());
+          }
         }
       });
 
@@ -75,31 +94,80 @@ export function usePokemon(): UsePokemonReturn {
     } finally {
       setLoading(false);
       setLoadingMore(false);
+      setAutoSearching(false);
     }
   }, []);
 
+  // Debounced search function
+  const debouncedSearch = useCallback((filters: SearchFilters, isManual = false) => {
+    // Clear existing timer
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    // For non-text filters (like types), search immediately
+    const hasTypeChanges = JSON.stringify(filters.types) !== JSON.stringify(activeFilters.types);
+    const hasQueryChanges = filters.query !== activeFilters.query;
+    
+    if (hasTypeChanges && !hasQueryChanges) {
+      // Types changed but query didn't - search immediately but smoothly
+      fetchPokemon(1, filters, true, false);
+      return;
+    }
+
+    // For text search, apply debouncing
+    if (hasQueryChanges || isManual) {
+      if (isManual) {
+        // Manual search - immediate
+        fetchPokemon(1, filters, true, true);
+      } else {
+        // Auto search - debounced
+        debounceTimerRef.current = setTimeout(() => {
+          fetchPokemon(1, filters, true, false);
+        }, 300);
+      }
+    }
+  }, [activeFilters, fetchPokemon]);
+
   // Load initial Pokemon on mount
   useEffect(() => {
-    fetchPokemon(1, {}, true);
+    if (isInitialMount.current) {
+      fetchPokemon(1, {}, true, false);
+      isInitialMount.current = false;
+    }
   }, [fetchPokemon]);
+
+  // Cleanup debounce timer on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, []);
 
   const loadMore = useCallback(() => {
     if (!hasMore || loadingMore) return;
-    fetchPokemon(currentPage + 1, activeFilters, false);
+    fetchPokemon(currentPage + 1, activeFilters, false, false);
   }, [hasMore, loadingMore, currentPage, activeFilters, fetchPokemon]);
 
-  const search = useCallback((filters: SearchFilters) => {
-    fetchPokemon(1, filters, true);
-  }, [fetchPokemon]);
+  const search = useCallback((filters: SearchFilters, isManual = false) => {
+    debouncedSearch(filters, isManual);
+  }, [debouncedSearch]);
 
   const resetSearch = useCallback(() => {
-    fetchPokemon(1, {}, true);
+    // Clear any pending debounced search
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+    fetchPokemon(1, {}, true, true);
   }, [fetchPokemon]);
 
   return {
     pokemon,
     loading,
     loadingMore,
+    autoSearching,
     error,
     hasMore,
     total,

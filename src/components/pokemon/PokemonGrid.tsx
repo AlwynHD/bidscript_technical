@@ -2,12 +2,13 @@ import type { Pokemon } from '@/types/pokemon';
 import PokemonCard from './PokemonCard';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Loader2 } from 'lucide-react';
 
 interface PokemonGridProps {
   pokemon: Pokemon[];
   loading?: boolean;
   loadingMore?: boolean;
+  autoSearching?: boolean; // New prop
   hasMore?: boolean;
   onLoadMore?: () => void;
   total?: number;
@@ -17,6 +18,7 @@ export default function PokemonGrid({
   pokemon, 
   loading, 
   loadingMore, 
+  autoSearching,
   hasMore, 
   onLoadMore,
   total = 0
@@ -43,7 +45,7 @@ export default function PokemonGrid({
     );
   }
 
-  if (pokemon.length === 0) {
+  if (pokemon.length === 0 && !autoSearching) {
     return (
       <div className="text-center text-muted-foreground py-12">
         <p className="text-lg">No Pokémon found</p>
@@ -54,15 +56,35 @@ export default function PokemonGrid({
 
   return (
     <div className="space-y-6">
-      {/* Results Count */}
-      <div className="text-sm text-muted-foreground">
-        Showing {pokemon.length} of {total} Pokémon
+      {/* Results Count with Auto-Search Indicator */}
+      <div className="flex items-center justify-between">
+        <div className="text-sm text-muted-foreground">
+          Showing {pokemon.length} of {total} Pokémon
+        </div>
+        
+        {autoSearching && (
+          <div className="flex items-center text-sm text-muted-foreground">
+            <Loader2 className="w-4 h-4 animate-spin mr-2" />
+            Searching...
+          </div>
+        )}
       </div>
 
-      {/* Pokemon Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+      {/* Pokemon Grid with Smooth Transitions */}
+      <div 
+        className={`
+          grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6
+          transition-opacity duration-300 ease-in-out
+          ${autoSearching ? 'opacity-75' : 'opacity-100'}
+        `}
+      >
         {pokemon.map((poke) => (
-          <PokemonCard key={poke.id} pokemon={poke} />
+          <div
+            key={poke.id}
+            className="animate-in fade-in slide-in-from-bottom-4 duration-300"
+          >
+            <PokemonCard pokemon={poke} />
+          </div>
         ))}
       </div>
       

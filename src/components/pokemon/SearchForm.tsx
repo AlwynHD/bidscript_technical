@@ -46,8 +46,45 @@ export default function SearchForm({ onSearch, onReset, loading }: SearchFormPro
   const [filters, setFilters] = useState<SearchFilters>({});
   const [selectedDropdownType, setSelectedDropdownType] = useState<string>('all');
 
-  const handleSearch = () => {
-    onSearch(filters);
+  // Auto-trigger search whenever filters change
+  const triggerSearch = (newFilters: SearchFilters) => {
+    setFilters(newFilters);
+    onSearch(newFilters); // This will now be debounced in the hook
+  };
+
+  const handleQueryChange = (query: string) => {
+    const newFilters = { ...filters, query };
+    triggerSearch(newFilters);
+  };
+
+  const handleTypeChange = (value: string) => {
+    setSelectedDropdownType(value);
+    
+    if (value === 'all') {
+      const newFilters = { ...filters, types: [] };
+      triggerSearch(newFilters);
+      return;
+    }
+    
+    const type = value as PokemonType;
+    const currentTypes = filters.types || [];
+    
+    if (currentTypes.includes(type) || currentTypes.length >= 2) {
+      return;
+    }
+    
+    const newFilters = {
+      ...filters,
+      types: [...currentTypes, type]
+    };
+    
+    triggerSearch(newFilters);
+  };
+
+  const removeType = (typeToRemove: PokemonType) => {
+    const updatedTypes = filters.types?.filter(type => type !== typeToRemove);
+    const newFilters = { ...filters, types: updatedTypes };
+    triggerSearch(newFilters);
   };
 
   const handleReset = () => {
@@ -56,65 +93,14 @@ export default function SearchForm({ onSearch, onReset, loading }: SearchFormPro
     onReset();
   };
 
-  const handleTypeChange = (value: string) => {
-    setSelectedDropdownType(value);
-    
-    let newFilters: SearchFilters;
-    
-    if (value === 'all') {
-      newFilters = { ...filters, types: [] };
-      setFilters(newFilters);
-      onSearch(newFilters); // Trigger search with cleared types
-      return;
-    }
-    
-    const type = value as PokemonType;
-    const currentTypes = filters.types || [];
-    
-    // Don't add if already selected or if we already have 2 types
-    if (currentTypes.includes(type) || currentTypes.length >= 2) {
-      return;
-    }
-    
-    newFilters = {
-      ...filters,
-      types: [...currentTypes, type]
-    };
-    
-    setFilters(newFilters);
-    onSearch(newFilters); // Trigger search with new type added
-  };
-
-  const removeType = (typeToRemove: PokemonType) => {
-    const updatedTypes = filters.types?.filter(type => type !== typeToRemove);
-    const newFilters = { ...filters, types: updatedTypes };
-    
-    setFilters(prev => ({
-      ...prev,
-      types: prev.types?.filter(type => type !== typeToRemove)
-    }));
-    
-    onSearch(newFilters); // Auto-search when type is removed
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-    }
-  };
-
   const selectedTypes = filters.types || [];
   const availableTypes = pokemonTypes.filter(type => !selectedTypes.includes(type));
-  
-  // Check if we have active filters
   const hasActiveFilters = !!(filters.query?.trim()) || selectedTypes.length > 0;
 
   return (
     <Card className="mb-8">
       <CardContent className="p-4 sm:p-6">
-        {/* Mobile-first responsive grid */}
         <div className="space-y-4 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-4 mb-4">
-          {/* Search Query - Full width on mobile, 2 cols on desktop */}
           <div className="space-y-2 lg:col-span-2">
             <label className="text-sm font-medium">Search Pokemon</label>
             <div className="relative">
@@ -122,21 +108,19 @@ export default function SearchForm({ onSearch, onReset, loading }: SearchFormPro
               <Input
                 type="text"
                 value={filters.query || ''}
-                onChange={(e) => setFilters(prev => ({ ...prev, query: e.target.value }))}
-                onKeyPress={handleKeyPress}
-                placeholder="Search by name or ability..."
+                onChange={(e) => handleQueryChange(e.target.value)}
+                placeholder="Search by name or ability... (auto-search)"
                 className="pl-10"
               />
             </div>
+            <p className="text-xs text-muted-foreground">
+              Search updates automatically as you type
+            </p>
           </div>
 
-          {/* Type Filter */}
           <div className="space-y-2">
             <label className="text-sm font-medium">Type Filter</label>
-            <Select
-              value={selectedDropdownType}
-              onValueChange={handleTypeChange}
-            >
+            <Select value={selectedDropdownType} onValueChange={handleTypeChange}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -155,7 +139,6 @@ export default function SearchForm({ onSearch, onReset, loading }: SearchFormPro
           </div>
         </div>
 
-        {/* Selected Types */}
         {selectedTypes.length > 0 && (
           <div className="mb-4">
             <label className="text-sm font-medium mb-2 block">Selected Types (Max 2)</label>
@@ -177,23 +160,14 @@ export default function SearchForm({ onSearch, onReset, loading }: SearchFormPro
           </div>
         )}
 
-        {/* Action Buttons - Stack on mobile, inline on desktop */}
-        <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
-          <Button onClick={handleSearch} disabled={loading} className="w-full sm:w-auto">
-            <Search className="w-4 h-4 mr-2" />
-            {loading ? 'Searching...' : 'Search'}
-          </Button>
-          
-          {hasActiveFilters && (
-            <>
-              <Button variant="outline" onClick={handleReset} className="w-full sm:w-auto">
-                <X className="w-4 h-4 mr-2" />
-                Clear Filters
-              </Button>
-
-            </>
-          )}
-        </div>
+        {hasActiveFilters && (
+          <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
+            <Button variant="outline" onClick={handleReset} className="w-full sm:w-auto">
+              <X className="w-4 h-4 mr-2" />
+              Clear Filters
+            </Button>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
