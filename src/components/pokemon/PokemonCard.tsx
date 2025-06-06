@@ -1,8 +1,13 @@
+// src/components/pokemon/PokemonCard.tsx
 import type { Pokemon } from '@/types/pokemon';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
+import { Heart } from 'lucide-react';
+import { useFavorites } from '@/context/FavoritesContext';
+
 interface PokemonCardProps {
   pokemon: Pokemon;
 }
@@ -30,16 +35,46 @@ const typeColors: Record<string, string> = {
 
 export default function PokemonCard({ pokemon }: PokemonCardProps) {
   const router = useRouter();
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const favorite = isFavorite(pokemon.id);
 
-  const handlePokemonClick = (id: string | number) => {
-    router.push(`/pokemon/${id}`);
+  const handlePokemonClick = (e: React.MouseEvent) => {
+    // Prevent card click when clicking favorite button
+    if ((e.target as HTMLElement).closest('button')) {
+      return;
+    }
+    router.push(`/pokemon/${pokemon.id}`);
   };
+
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    toggleFavorite(pokemon.id);
+  };
+
   return (
-    <Card className="group hover:shadow-lg transition-all duration-200 hover:-translate-y-1 cursor-pointer" onClick={() => handlePokemonClick(pokemon.id)}>      <CardHeader className="pb-2">
-      <div className="text-sm text-muted-foreground font-mono text-center">
-        #{pokemon.id.toString().padStart(3, '0')}
-      </div>
-    </CardHeader>
+    <Card 
+      className="group hover:shadow-lg transition-all duration-200 hover:-translate-y-1 cursor-pointer relative" 
+      onClick={handlePokemonClick}
+    >
+      {/* Favorite Button */}
+      <Button
+        variant="ghost"
+        size="icon"
+        className="absolute top-1 right-1 w-8 h-8 z-10"
+        onClick={handleFavoriteClick}
+      >
+        <Heart 
+          className={`w-4 h-4 transition-colors ${
+            favorite ? 'fill-red-500 text-red-500' : 'text-gray-400 hover:text-red-500'
+          }`}
+        />
+      </Button>
+      
+      <CardHeader className="pb-2">
+        <div className="text-sm text-muted-foreground font-mono text-center">
+          #{pokemon.id.toString().padStart(3, '0')}
+        </div>
+      </CardHeader>
 
       <CardContent className="pt-0">
         {/* Pokemon Image */}

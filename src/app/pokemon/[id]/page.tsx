@@ -4,8 +4,9 @@
 import { use } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Heart } from 'lucide-react';
 import { usePokemonDetail } from '@/hooks/usePokemonDetails';
+import { useFavorites } from '@/context/FavoritesContext';
 
 // Import all the modular components
 import PokemonImage from '@/components/pokemon/detail/PokemonImage';
@@ -26,6 +27,7 @@ export default function PokemonDetailPage({
 }) {
   const { id } = use(params);
   const { pokemon, loading, error } = usePokemonDetail(id);
+  const { isFavorite, toggleFavorite } = useFavorites();
   const router = useRouter();
 
   if (loading) {
@@ -36,15 +38,35 @@ export default function PokemonDetailPage({
     return <PokemonError id={id} error={error || 'Pokemon not found'} />;
   }
 
-  
+  const favorite = isFavorite(pokemon.id);
+
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-4 ">
-        {/* Back Button */}
-        <div className="mb-4 ">
-          <Button variant="outline" className="gap-2 hover:cursor-pointer" size="sm" onClick={() => router.push('/dashboard')}>
+      <div className="container mx-auto px-4 py-4">
+        {/* Back Button and Favorite Button */}
+        <div className="mb-4 flex items-center justify-between">
+          <Button 
+            variant="outline" 
+            className="gap-2 hover:cursor-pointer" 
+            size="sm" 
+            onClick={() => router.push('/dashboard')}
+          >
             <ArrowLeft className="w-4 h-4" />
             Back to Pokédex
+          </Button>
+          
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => toggleFavorite(pokemon.id)}
+            className="gap-2"
+          >
+            <Heart 
+              className={`w-4 h-4 transition-colors ${
+                favorite ? 'fill-red-500 text-red-500' : ''
+              }`}
+            />
+            {favorite ? 'Favorited' : 'Add to Favorites'}
           </Button>
         </div>
 
