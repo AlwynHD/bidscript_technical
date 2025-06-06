@@ -1,4 +1,3 @@
-// src/components/pokemon/detail/PokemonBasicInfo.tsx
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import type { Pokemon } from '@/types/pokemon';
@@ -33,7 +32,7 @@ export default function PokemonBasicInfo({ pokemon }: PokemonBasicInfoProps) {
     <Card>
       <CardHeader className="pb-2">
         <div className="text-center space-y-2">
-          {/* ID and Name grouped together */}
+          {/* ID and Name */}
           <div className="space-y-1">
             <div className="text-xs text-muted-foreground font-mono">
               #{pokemon.id.toString().padStart(3, '0')}
@@ -41,7 +40,7 @@ export default function PokemonBasicInfo({ pokemon }: PokemonBasicInfoProps) {
             <h1 className="text-xl font-bold">{pokemon.name.english}</h1>
           </div>
           
-          {/* Species and Types grouped together */}
+          {/* Species and Types */}
           <div className="space-y-2">
             <div className="text-sm font-medium text-muted-foreground">
               {pokemon.species}

@@ -1,4 +1,3 @@
-// src/context/FavoritesContext.tsx
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
@@ -34,7 +33,7 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  // Save favorites to localStorage whenever they change
+  // Save favorites to localStorage when they change
   useEffect(() => {
     localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(Array.from(favorites)));
   }, [favorites]);

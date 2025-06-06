@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import { usePokemon } from '@/hooks/usePokemonSearch';
 import { useFavorites } from '@/context/FavoritesContext';
@@ -31,7 +30,7 @@ export default function HomePage() {
     resetSearch
   } = usePokemon();
 
-  // Whenever filters change, trigger the hook’s search
+  // When filters change, trigger the hook’s search
   useEffect(() => {
     search(filters);
   }, [filters]);
@@ -51,7 +50,7 @@ export default function HomePage() {
             Discover and search through all Pokémon
           </p>
         </header>
-
+        {/* Main and Favorites Tab */}
         <Tabs
           value={activeTab}
           onValueChange={(val: string) => setActiveTab(val as 'all' | 'favorites')}

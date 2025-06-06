@@ -7,7 +7,7 @@ const typedPokemonData = pokemonData as Pokemon[];
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   
-  // Pagination
+  // Pagination settings
   const page = parseInt(searchParams.get('page') || '1');
   const limit = parseInt(searchParams.get('limit') || '20');
   
@@ -27,10 +27,10 @@ export async function GET(request: NextRequest) {
   if (filters.query) {
     const query = filters.query.toLowerCase().trim();
     filteredPokemon = filteredPokemon.filter(pokemon => {
-      // Search in name
+      // Search name
       const nameMatch = pokemon.name.english.toLowerCase().includes(query);
       
-      // Search in abilities
+      // Search abilities
       const abilityMatch = pokemon.profile.ability.some(([name]) => 
         name.toLowerCase().includes(query)
       );
@@ -47,10 +47,6 @@ export async function GET(request: NextRequest) {
         pokemon.type.includes(selectedType)
       );
       
-      // Alternative: Check if Pokemon has ANY selected types (OR logic)
-      // return filters.types!.some(selectedType => 
-      //   pokemon.type.includes(selectedType)
-      // );
     });
   }
 

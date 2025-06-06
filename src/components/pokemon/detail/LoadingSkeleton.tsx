@@ -1,4 +1,3 @@
-// src/components/pokemon/detail/LoadingSkeleton.tsx
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function LoadingSkeleton() {

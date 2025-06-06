@@ -1,4 +1,3 @@
-// src/components/pokemon/detail/PokemonDescription.tsx
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import type { Pokemon } from '@/types/pokemon';
 
