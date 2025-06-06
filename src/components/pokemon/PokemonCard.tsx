@@ -2,7 +2,10 @@ import type { Pokemon } from '@/types/pokemon';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Heart } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useFavorites } from '@/hooks/useFavorites';
+
 interface PokemonCardProps {
   pokemon: Pokemon;
 }
@@ -30,16 +33,39 @@ const typeColors: Record<string, string> = {
 
 export default function PokemonCard({ pokemon }: PokemonCardProps) {
   const router = useRouter();
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   const handlePokemonClick = (id: string | number) => {
     router.push(`/pokemon/${id}`);
   };
+
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click from triggering
+    toggleFavorite(pokemon);
+  };
+
   return (
-    <Card className="group hover:shadow-lg transition-all duration-200 hover:-translate-y-1 cursor-pointer" onClick={() => handlePokemonClick(pokemon.id)}>      <CardHeader className="pb-2">
-      <div className="text-sm text-muted-foreground font-mono text-center">
-        #{pokemon.id.toString().padStart(3, '0')}
-      </div>
-    </CardHeader>
+    <Card className="group hover:shadow-lg transition-all duration-200 hover:-translate-y-1 cursor-pointer relative" onClick={() => handlePokemonClick(pokemon.id)}>
+      {/* Favorite Button */}
+      <button
+        onClick={handleFavoriteClick}
+        className="absolute top-2 right-2 z-10 p-2 rounded-full bg-white/80 hover:bg-white transition-colors shadow-sm"
+        aria-label={isFavorite(pokemon.id) ? 'Remove from favorites' : 'Add to favorites'}
+      >
+        <Heart 
+          className={`w-4 h-4 transition-colors ${
+            isFavorite(pokemon.id) 
+              ? 'fill-red-500 text-red-500' 
+              : 'text-gray-400 hover:text-red-500'
+          }`} 
+        />
+      </button>
+
+      <CardHeader className="pb-2">
+        <div className="text-sm text-muted-foreground font-mono text-center">
+          #{pokemon.id.toString().padStart(3, '0')}
+        </div>
+      </CardHeader>
 
       <CardContent className="pt-0">
         {/* Pokemon Image */}
