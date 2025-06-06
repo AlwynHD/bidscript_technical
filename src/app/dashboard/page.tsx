@@ -14,7 +14,7 @@ export default function HomePage() {
   const [activeTab, setActiveTab] = useState<'all' | 'favorites'>('all');
   const { favoritesCount } = useFavorites();
 
-  // LIFTED state ↓
+  // Global state for search filters
   const [filters, setFilters] = useState<SearchFilters>({});
   const [selectedDropdownType, setSelectedDropdownType] = useState<string>('all');
 

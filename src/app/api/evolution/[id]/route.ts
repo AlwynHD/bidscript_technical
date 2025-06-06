@@ -10,16 +10,16 @@ typedPokemonData.forEach(pokemon => {
   pokemonMap.set(pokemon.id, pokemon);
 });
 
-// Helper function to normalize evolution data to consistent format
+// Normalize evolution data to consistent format
 function normalizeEvolutionData(evolutionData: any): [string, string][] {
   if (!evolutionData) return [];
   
-  // If it's already an array of arrays like [["12", "Level 10"]]
+  //For array of arrays like [["12", "Level 10"]]
   if (Array.isArray(evolutionData) && evolutionData.length > 0 && Array.isArray(evolutionData[0])) {
     return evolutionData as [string, string][];
   }
   
-  // If it's a single tuple like ["10", "Level 7"]
+  // For single tuple like ["10", "Level 7"]
   if (Array.isArray(evolutionData) && evolutionData.length === 2 && typeof evolutionData[0] === 'string') {
     return [evolutionData as [string, string]];
   }
@@ -27,7 +27,7 @@ function normalizeEvolutionData(evolutionData: any): [string, string][] {
   return [];
 }
 
-// Function to find the base pokemon by going backwards through prev
+// Find the base pokemon by traversing to base pokemon
 function findBasePokemon(pokemonId: number, visited = new Set<number>()): Pokemon | null {
   // Prevent infinite loops
   if (visited.has(pokemonId)) return null;
@@ -39,18 +39,18 @@ function findBasePokemon(pokemonId: number, visited = new Set<number>()): Pokemo
   // Normalize prev evolution data
   const prevEvolutions = normalizeEvolutionData(pokemon.evolution.prev);
   
-  // If no prev evolution, this is the base
+  // If no prev evolution, current is base pokemon
   if (prevEvolutions.length === 0) {
     return pokemon;
   }
   
-  // Go to the first previous evolution
+  // Traverse to Base Pokemon
   const [prevIdStr] = prevEvolutions[0];
   const prevId = parseInt(prevIdStr);
   return findBasePokemon(prevId, visited);
 }
 
-// Function to build evolution chain by going forward through next
+// Build Evolution Chain 
 function buildEvolutionChainFromBase(basePokemonId: number): EvolutionChainNode[] {
   const chain: EvolutionChainNode[] = [];
   const visited = new Set<number>();
@@ -79,7 +79,7 @@ function buildEvolutionChainFromBase(basePokemonId: number): EvolutionChainNode[
     // Normalize next evolution data
     const nextEvolutions = normalizeEvolutionData(pokemon.evolution.next);
     
-    // Follow the first next evolution (for linear chain)
+    // Follow the 'next' evolution (for linear chain)
     if (nextEvolutions.length > 0) {
       const [nextIdStr, nextMethod] = nextEvolutions[0];
       const nextId = parseInt(nextIdStr);
@@ -165,7 +165,7 @@ export async function GET(
     } else {
       evolutionChain = buildEvolutionChainFromBase(basePokemon.id);
     }
-    
+    console.log(evolutionChain);
     return Response.json({
       pokemonId,
       pokemonName: pokemon.name.english,
