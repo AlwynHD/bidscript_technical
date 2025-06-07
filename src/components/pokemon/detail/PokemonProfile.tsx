@@ -6,7 +6,7 @@ import type { Pokemon } from '@/types/pokemon';
 interface PokemonProfileProps {
   pokemon: Pokemon;
 }
-
+// Show Gender of Pokemon
 const parseGender = (genderString: string) => {
   // Handle common gender formats
   if (genderString.includes('Genderless') || genderString.includes('genderless')) {

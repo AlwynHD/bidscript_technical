@@ -27,6 +27,7 @@ interface PokemonBasicInfoProps {
   pokemon: Pokemon;
 }
 
+// Shows Basic Info of a Pokemon
 export default function PokemonBasicInfo({ pokemon }: PokemonBasicInfoProps) {
   return (
     <Card>

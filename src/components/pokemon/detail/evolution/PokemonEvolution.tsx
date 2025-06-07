@@ -20,6 +20,7 @@ const PokemonEvolution: React.FC<PokemonEvolutionProps> = ({ pokemon }) => {
   const router = useRouter();
   const { treeData, loading, error } = useEvolutionTree(pokemon.id);
 
+  //Route to Clicked Pokemon
   const handlePokemonClick = (pokemonId: number) => {
     if (pokemonId !== pokemon.id) {
       router.push(`/pokemon/${pokemonId}`);
@@ -40,7 +41,7 @@ const PokemonEvolution: React.FC<PokemonEvolutionProps> = ({ pokemon }) => {
     return node.children.length > 4 || 
            node.children.some(child => child.children.length > 2);
   };
-
+  // Show Skeleton When Loading
   if (loading) {
     return (
       <Card>
@@ -57,7 +58,7 @@ const PokemonEvolution: React.FC<PokemonEvolutionProps> = ({ pokemon }) => {
       </Card>
     );
   }
-
+  // Error Handling
   if (error || !treeData || treeData.totalMembers <= 1) {
     return null;
   }

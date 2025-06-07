@@ -6,7 +6,7 @@ interface PokemonErrorProps {
   id: string;
   error: string;
 }
-
+// SHows When Pokemon Does not Exist
 export default function PokemonError({ id, error }: PokemonErrorProps) {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center">

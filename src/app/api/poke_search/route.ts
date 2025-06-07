@@ -4,6 +4,7 @@ import type { Pokemon, SearchFilters, PokemonResponse } from '@/types/pokemon';
 
 const typedPokemonData = pokemonData as Pokemon[];
 
+//Search and Filter Pokemon API
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   
@@ -42,7 +43,7 @@ export async function GET(request: NextRequest) {
   // Apply multiple type filters
   if (filters.types && filters.types.length > 0) {
     filteredPokemon = filteredPokemon.filter(pokemon => {
-      // Check if Pokemon has ALL selected types (AND logic)
+      // Check if Pokemon has ALL selected types
       return filters.types!.every(selectedType => 
         pokemon.type.includes(selectedType)
       );
@@ -56,6 +57,7 @@ export async function GET(request: NextRequest) {
   const paginatedPokemon = filteredPokemon.slice(offset, offset + limit);
   const hasMore = offset + limit < total;
 
+  // Prepare response
   const response: PokemonResponse = {
     pokemon: paginatedPokemon,
     total,
@@ -63,6 +65,6 @@ export async function GET(request: NextRequest) {
     limit,
     hasMore
   };
-
+  
   return Response.json(response);
 }

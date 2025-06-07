@@ -17,7 +17,7 @@ interface SearchFormProps {
   onRemoveType: (type: PokemonType) => void;
   onReset: () => void;
   loading?: boolean;
-  autoSearching?: boolean; // Add this prop
+  autoSearching?: boolean;
 }
 
 const pokemonTypes: PokemonType[] = [
@@ -97,7 +97,7 @@ export default function SearchForm({
     <Card className="mb-8">
       <CardContent className="p-4 sm:p-6">
         <div className="space-y-4 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-4 mb-4">
-          {/* NAME/QUERY INPUT */}
+          {/* Quert Input */}
           <div className="space-y-2 lg:col-span-2">
             <label className="text-sm font-medium">Search Pokémon</label>
             <div className="relative">
@@ -123,7 +123,7 @@ export default function SearchForm({
             </p>
           </div>
 
-          {/* TYPE DROPDOWN */}
+          {/* Type Drowndown */}
           <div className="space-y-2">
             <label className="text-sm font-medium">Type Filter</label>
             <Select
@@ -151,7 +151,7 @@ export default function SearchForm({
           </div>
         </div>
 
-        {/* DISPLAY SELECTED TYPE BADGES */}
+        {/* Shows Selected Type Badges */}
         {selectedTypes.length > 0 && (
           <div className="mb-4">
             <label className="text-sm font-medium mb-2 block">
@@ -175,7 +175,7 @@ export default function SearchForm({
           </div>
         )}
 
-        {/* CLEAR FILTERS BUTTON */}
+        {/* Clear Filters */}
         {hasActiveFilters && (
           <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
             <Button

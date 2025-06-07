@@ -4,6 +4,7 @@ import pokemonData from '@/data/pokedex.json';
 import type { Pokemon } from '@/types/pokemon';
 
 const typedPokemonData = pokemonData as Pokemon[];
+
 // Returns information of a Pokemon by ID
 export async function GET(
   request: NextRequest,
@@ -13,6 +14,7 @@ export async function GET(
   
   const pokemonId = parseInt(id);
   
+  // Validate ID
   if (isNaN(pokemonId)) {
     return Response.json({ error: 'Invalid Pokemon ID' }, { status: 400 });
   }

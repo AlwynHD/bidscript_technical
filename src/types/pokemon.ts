@@ -1,3 +1,5 @@
+
+// Pokemon Name Information
 export interface PokemonName {
   english: string;
   japanese: string;
@@ -5,6 +7,7 @@ export interface PokemonName {
   french: string;
 }
 
+//Pokemon Base Statistics
 export interface PokemonStats {
   HP: number;
   Attack: number;
@@ -14,12 +17,16 @@ export interface PokemonStats {
   Speed: number;
 }
 
+// Pokemon Evolution Information (['id', 'method'])
 export interface PokemonEvolution {
-  next?: [string, string][]; // Array of [id, method] pairs
-  prev?: [string, string][]; // Array of [id, method] pairs
+  next?: [string, string][]; 
+  prev?: [string, string][];
 }
+// Pokemon Abilities '[ability_name, is_hidden_ability]'
 export type PokemonAbility = [string, string]; // [ability_name, is_hidden_ability]
 
+
+// Pokemon Profile Information
 export interface PokemonProfile {
   height: string;
   weight: string;
@@ -28,12 +35,14 @@ export interface PokemonProfile {
   gender: string;
 }
 
+// Pokemon Image Information
 export interface PokemonImage {
   sprite: string;
   thumbnail: string;
   hires: string;
 }
 
+// Pokemon Structure Information
 export interface Pokemon {
   id: number;
   name: PokemonName;
@@ -46,15 +55,20 @@ export interface Pokemon {
   image: PokemonImage;
 }
 
+
+// Pokemon Type Definitions
 export type PokemonType = 
   | "Normal" | "Fire" | "Water" | "Electric" | "Grass" | "Ice"
   | "Fighting" | "Poison" | "Ground" | "Flying" | "Psychic" 
   | "Bug" | "Rock" | "Ghost" | "Dragon" | "Dark" | "Steel" | "Fairy";
 
+// Search Filters for Pokemon
 export interface SearchFilters {
   query?: string;
-  types?: PokemonType[];}
+  types?: PokemonType[];
+}
 
+// Pokemon Response Structure
 export interface PokemonResponse {
   pokemon: Pokemon[];
   total: number;
@@ -63,22 +77,3 @@ export interface PokemonResponse {
   hasMore: boolean;
 }
 
-
-
-
-export interface EvolutionChainNode {
-  id: number;
-  name: string;
-  image: string;
-  sprite: string;
-  types: string[];
-  evolutionMethod: string | null;
-  evolvesTo: EvolutionChainNode[];
-}
-
-export interface EvolutionChainResponse {
-  pokemonId: number;
-  pokemonName: string;
-  format: 'flat' | 'tree';
-  evolutionChain: EvolutionChainNode[];
-}

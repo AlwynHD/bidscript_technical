@@ -5,7 +5,7 @@ import React from 'react';
 interface EvolutionMethodProps {
   method?: string | null;
 }
-
+// Returns the evolution method as a small text component
 const EvolutionMethod: React.FC<EvolutionMethodProps> = ({ method }) => {
   if (!method) return null;
   

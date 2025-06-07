@@ -11,7 +11,7 @@ interface SimpleBranchingEvolutionProps {
   root: TreeNode;
   onPokemonClick: (id: number) => void;
 }
-
+// Renders Pokemon with simple Branching Evolution
 const SimpleBranchingEvolution: React.FC<SimpleBranchingEvolutionProps> = ({
   root,
   onPokemonClick

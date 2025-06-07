@@ -12,6 +12,7 @@ export function useEvolutionTree(pokemonId: number): UseEvolutionTreeReturn {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Hook to fetch evolution tree
   useEffect(() => {
     async function fetchEvolutionTree() {
       try {
@@ -26,7 +27,7 @@ export function useEvolutionTree(pokemonId: number): UseEvolutionTreeReturn {
         
         const data = await response.json();
         setTreeData(data.tree);
-        
+        // Error Handling
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
         setTreeData(null);

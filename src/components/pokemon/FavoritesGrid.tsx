@@ -1,4 +1,3 @@
-// src/components/pokemon/FavoritesGrid.tsx
 'use client';
 
 import { useFavorites } from '@/context/FavoritesContext';
@@ -31,7 +30,7 @@ export default function FavoritesGrid() {
     );
   }
 
-  // If there was an error fetching, show a simple error message
+  // Error Handling
   if (error) {
     return (
       <div className="text-center py-16">
@@ -43,7 +42,7 @@ export default function FavoritesGrid() {
     );
   }
 
-  // If no favorites, show empty state
+  // If Favorites Check
   if (favoritePokemon.length === 0) {
     return (
       <div className="text-center py-16">

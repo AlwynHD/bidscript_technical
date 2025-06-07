@@ -43,6 +43,7 @@ export default function PokemonDetailPage({
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-4">
+
         {/* Back Button and Favorite Button */}
         <div className="mb-4 flex items-center justify-between">
           <Button 
@@ -72,25 +73,25 @@ export default function PokemonDetailPage({
 
         {/* Main Pokemon Info Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-          {/* Left Column - Image & Basic Info */}
+          {/* Image & Basic Info */}
           <div className="space-y-4">
             <PokemonImage pokemon={pokemon} />
             <PokemonBasicInfo pokemon={pokemon} />
           </div>
 
-          {/* Middle Column - Stats & Description */}
+          {/* Stats & Description */}
           <div className="space-y-4">
             <PokemonStats pokemon={pokemon} />
             <PokemonDescription pokemon={pokemon} />
           </div>
 
-          {/* Right Column - Profile */}
+          {/* Profile */}
           <div className="space-y-4">
             <PokemonProfile pokemon={pokemon} />
           </div>
         </div>
 
-        {/* Evolution Section - Full Width at Bottom */}
+        {/* Evolution Section */}
         <div className="w-full">
           <PokemonEvolution pokemon={pokemon} />
         </div>

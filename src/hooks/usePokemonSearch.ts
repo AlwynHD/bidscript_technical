@@ -5,7 +5,7 @@ interface UsePokemonReturn {
   pokemon: Pokemon[];
   loading: boolean;
   loadingMore: boolean;
-  autoSearching: boolean; // New: subtle loading for auto-search
+  autoSearching: boolean;
   error: string | null;
   hasMore: boolean;
   total: number;

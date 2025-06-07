@@ -45,10 +45,11 @@ const PokemonNode: React.FC<PokemonNodeProps> = ({
   };
 
   return (
+    //Show Selected Pokemon in Tree
 <div 
   className={`relative overflow-hidden rounded-lg border-2 transition-all duration-200 hover:shadow-lg cursor-pointer ${
     isCurrent 
-      ? 'border-blue-500 shadow-lg ring-2 ring-primary/20 m-1' // ← Added m-1 for ring spacing
+      ? 'border-blue-500 shadow-lg ring-2 ring-primary/20 m-1'
       : 'border-border hover:border-primary/50'
   }`}
   onClick={() => onClick?.(pokemon.id)}

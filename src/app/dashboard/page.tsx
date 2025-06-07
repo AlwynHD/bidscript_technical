@@ -10,6 +10,8 @@ import { Heart } from 'lucide-react';
 import type { SearchFilters, PokemonType } from '@/types/pokemon';
 
 export default function HomePage() {
+
+  // Local state for active tab and favorites count
   const [activeTab, setActiveTab] = useState<'all' | 'favorites'>('all');
   const { favoritesCount } = useFavorites();
 
@@ -69,6 +71,7 @@ export default function HomePage() {
             </TabsTrigger>
           </TabsList>
 
+          {/* All Tab */}
           <TabsContent value="all" className="space-y-6">
             <SearchForm
               filters={filters}
@@ -100,9 +103,9 @@ export default function HomePage() {
               }}
               onReset={handleReset}
               loading={loading}
-              autoSearching={autoSearching} // Pass the autoSearching prop
+              autoSearching={autoSearching}
             />
-
+            {/* Error Handling */}
             {error && (
               <div className="bg-destructive/15 border border-destructive/20 text-destructive px-4 py-3 rounded-lg">
                 {error}
@@ -120,6 +123,7 @@ export default function HomePage() {
             />
           </TabsContent>
 
+          {/* Favorites Tab */}
           <TabsContent value="favorites">
             <FavoritesGrid />
           </TabsContent>

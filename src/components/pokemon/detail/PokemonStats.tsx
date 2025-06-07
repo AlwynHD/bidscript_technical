@@ -37,6 +37,7 @@ export default function PokemonStats({ pokemon }: PokemonStatsProps) {
           </span>
         </div>
       </CardHeader>
+      {/* Statistics */}
       <CardContent className="space-y-3">
         <StatBar label="HP" value={pokemon.base.HP} icon={Heart} />
         <StatBar label="Attack" value={pokemon.base.Attack} icon={Sword} />

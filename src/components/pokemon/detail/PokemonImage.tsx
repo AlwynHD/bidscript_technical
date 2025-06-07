@@ -6,7 +6,7 @@ import type { Pokemon } from '@/types/pokemon';
 interface PokemonImageProps {
   pokemon: Pokemon;
 }
-
+// Pokemon Image Card
 export default function PokemonImage({ pokemon }: PokemonImageProps) {
   return (
     <Card>

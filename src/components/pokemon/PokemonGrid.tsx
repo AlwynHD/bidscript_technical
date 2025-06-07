@@ -38,7 +38,6 @@ export default function PokemonGrid({
         }
       },
       {
-        // Trigger when sentinel is 100px away from viewport
         rootMargin: '100px',
         threshold: 0.1,
       }
@@ -55,9 +54,6 @@ export default function PokemonGrid({
   if (loading) {
     return (
       <div className="space-y-6">
-        {/* <div className="text-sm text-muted-foreground">
-          Loading Pokemon...
-        </div> */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
           {Array.from({ length: 20 }).map((_, i) => (
             <div key={i} className="space-y-3">
@@ -73,7 +69,7 @@ export default function PokemonGrid({
       </div>
     );
   }
-
+  // No Pokemon Found
   if (pokemon.length === 0 && !autoSearching) {
     return (
       <div className="text-center text-muted-foreground py-12">

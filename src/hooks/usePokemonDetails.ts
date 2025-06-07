@@ -8,6 +8,7 @@ interface UsePokemonDetailReturn {
   error: string | null;
 }
 
+// Fetch Pokemon Details using ID
 export function usePokemonDetail(id: string): UsePokemonDetailReturn {
   const [pokemon, setPokemon] = useState<Pokemon | null>(null);
   const [loading, setLoading] = useState(true);
@@ -30,6 +31,7 @@ export function usePokemonDetail(id: string): UsePokemonDetailReturn {
         
         const data = await response.json();
         setPokemon(data);
+        //Error Handling
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
         setPokemon(null);

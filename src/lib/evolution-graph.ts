@@ -31,6 +31,7 @@ class EvolutionGraph {
     this.buildGraph();
   }
 
+  //Standardize evolution data
   private normalizeEvolutionData(data: any): [string, string][] {
     if (!data) return [];
     

@@ -7,7 +7,7 @@ interface StatBarProps {
   maxValue?: number;
   icon: React.ComponentType<{ className?: string }>;
 }
-
+// Stat Bar
 export default function StatBar({ label, value, maxValue = 255, icon: Icon }: StatBarProps) {
   const percentage = (value / maxValue) * 100;
   

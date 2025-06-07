@@ -16,6 +16,7 @@ export interface EvolutionTreeData {
   layout: 'linear' | 'branching' | 'complex';
 }
 
+// Build Evolution Tree From Family Data
 export class EvolutionTreeBuilder {
   static buildTree(family: EvolutionFamily, currentId: number): EvolutionTreeData {
     const roots: TreeNode[] = [];
@@ -66,6 +67,7 @@ export class EvolutionTreeBuilder {
     };
   }
 
+  // Recursive function to build the subtree
   private static buildSubtree(
     node: EvolutionNode,
     method: string | null,
@@ -116,6 +118,7 @@ export class EvolutionTreeBuilder {
     return treeNode;
   }
 
+  // Get path from current node to root
   private static getPathToRoot(
     nodeId: number,
     adjacency: Map<number, Array<{ to: number; method: string }>>,
@@ -125,12 +128,13 @@ export class EvolutionTreeBuilder {
     // For brevity, returning empty array here
     return [];
   }
-
+  // Get maximum depth of the tree
   private static getMaxDepth(node: TreeNode): number {
     if (node.children.length === 0) return node.depth;
     return Math.max(...node.children.map(child => this.getMaxDepth(child)));
   }
-
+  
+  // Determine layout type based on family structure
   private static determineLayout(family: EvolutionFamily, roots: TreeNode[]): 'linear' | 'branching' | 'complex' {
     // Linear: single evolution line
     if (family.edges.length === family.nodes.size - 1) {
