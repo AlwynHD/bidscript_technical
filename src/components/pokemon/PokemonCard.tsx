@@ -84,6 +84,7 @@ export default function PokemonCard({ pokemon }: PokemonCardProps) {
               src={pokemon.image.hires}
               alt={pokemon.name.english}
               fill
+              unoptimized
               className="object-contain group-hover:scale-110 transition-transform duration-200"
               onError={(e) => {
                 e.currentTarget.src = pokemon.image.sprite;
