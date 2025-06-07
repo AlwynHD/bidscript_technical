@@ -17,7 +17,7 @@ const SimpleBranchingEvolution: React.FC<SimpleBranchingEvolutionProps> = ({
 }) => {
   const renderNode = (node: TreeNode, depth = 0): React.JSX.Element => {
     return (
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-4">
         <div className="flex flex-col items-center">
           <PokemonNode
             pokemon={node.pokemon}
@@ -31,7 +31,7 @@ const SimpleBranchingEvolution: React.FC<SimpleBranchingEvolutionProps> = ({
           <>
             {node.children.length === 1 ? (
               <>
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center gap-1">
                   <ArrowRight className="w-4 h-4 text-muted-foreground" />
                   <EvolutionMethod method={node.children[0].method} />
                 </div>
@@ -42,7 +42,7 @@ const SimpleBranchingEvolution: React.FC<SimpleBranchingEvolutionProps> = ({
                 <GitBranch className="w-4 h-4 text-muted-foreground" />
                 <div className="flex flex-col gap-4">
                   {node.children.map((child) => (
-                    <div key={child.pokemon.id} className="flex items-center gap-2">
+                    <div key={child.pokemon.id} className="flex items-center gap-4">
                       <div className="flex flex-col items-center">
                         <EvolutionMethod method={child.method} />
                         <PokemonNode

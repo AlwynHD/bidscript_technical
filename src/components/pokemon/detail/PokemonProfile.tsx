@@ -56,10 +56,10 @@ export default function PokemonProfile({ pokemon }: PokemonProfileProps) {
 
   return (
     <Card>
-      <CardHeader className="pb-2">
+      <CardHeader className="">
         <h2 className="text-lg font-semibold">Profile</h2>
       </CardHeader>
-      <CardContent className="pt-0 space-y-3">
+      <CardContent className="space-y-3">
         {/* Physical Stats */}
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-1">

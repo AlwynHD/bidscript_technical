@@ -29,7 +29,7 @@ export default function PokemonStats({ pokemon }: PokemonStatsProps) {
 
   return (
     <Card>
-      <CardHeader className="pb-2">
+      <CardHeader className="">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold">Base Stats</h2>
           <span className="text-sm text-muted-foreground font-medium">
@@ -37,7 +37,7 @@ export default function PokemonStats({ pokemon }: PokemonStatsProps) {
           </span>
         </div>
       </CardHeader>
-      <CardContent className="pt-0 space-y-3">
+      <CardContent className="space-y-3">
         <StatBar label="HP" value={pokemon.base.HP} icon={Heart} />
         <StatBar label="Attack" value={pokemon.base.Attack} icon={Sword} />
         <StatBar label="Defense" value={pokemon.base.Defense} icon={Shield} />

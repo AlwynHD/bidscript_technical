@@ -8,10 +8,10 @@ interface PokemonDescriptionProps {
 export default function PokemonDescription({ pokemon }: PokemonDescriptionProps) {
   return (
     <Card>
-      <CardHeader className="pb-2">
+      <CardHeader className="">
         <h2 className="text-lg font-bold">Description</h2>
       </CardHeader>
-      <CardContent className="pt-0">
+      <CardContent className="">
         <p className="text-muted-foreground text-sm leading-relaxed">
           {pokemon.description}
         </p>

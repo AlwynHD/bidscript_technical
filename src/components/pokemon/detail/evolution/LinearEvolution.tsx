@@ -16,7 +16,7 @@ const LinearEvolution: React.FC<LinearEvolutionProps> = ({
   onPokemonClick 
 }) => {
   return (
-    <div className="flex items-center justify-center gap-2 flex-wrap">
+    <div className="flex items-center justify-center gap-4 flex-wrap">
       {nodes.map((node, index) => (
         <React.Fragment key={node.pokemon.id}>
           <PokemonNode
@@ -25,7 +25,7 @@ const LinearEvolution: React.FC<LinearEvolutionProps> = ({
             onClick={onPokemonClick}
           />
           {index < nodes.length - 1 && (
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center gap-1">
               <ArrowRight className="w-4 h-4 text-muted-foreground" />
               <EvolutionMethod method={nodes[index + 1].method} />
             </div>

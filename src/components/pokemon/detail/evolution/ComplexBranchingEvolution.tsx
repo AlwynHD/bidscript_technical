@@ -73,7 +73,7 @@ const ComplexBranchingEvolution: React.FC<ComplexBranchingEvolutionProps> = ({
     
     // Regular branching (2-4 evolutions)
     return (
-      <div className="flex items-start gap-4">
+      <div className="flex items-start gap-6">
         <div className="flex flex-col items-center">
           <PokemonNode
             pokemon={node.pokemon}
@@ -91,7 +91,7 @@ const ComplexBranchingEvolution: React.FC<ComplexBranchingEvolutionProps> = ({
             
             <div className="flex flex-col gap-4">
               {node.children.map((child) => (
-                <div key={child.pokemon.id} className="flex items-center gap-2">
+                <div key={child.pokemon.id} className="flex items-center gap-4">
                   <div className="flex flex-col items-center">
                     <EvolutionMethod method={child.method} />
                     <PokemonNode
@@ -105,7 +105,7 @@ const ComplexBranchingEvolution: React.FC<ComplexBranchingEvolutionProps> = ({
                   {child.children.length > 0 && (
                     <>
                       <ArrowRight className="w-4 h-4 text-muted-foreground" />
-                      <div className="flex gap-2">
+                      <div className="flex gap-4">
                         {child.children.map((grandchild) => (
                           <div key={grandchild.pokemon.id} className="flex flex-col items-center">
                             <EvolutionMethod method={grandchild.method} />
