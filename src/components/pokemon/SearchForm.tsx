@@ -1,5 +1,6 @@
 'use client';
 
+import { useRef, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -16,6 +17,7 @@ interface SearchFormProps {
   onRemoveType: (type: PokemonType) => void;
   onReset: () => void;
   loading?: boolean;
+  autoSearching?: boolean; // Add this prop
 }
 
 const pokemonTypes: PokemonType[] = [
@@ -53,10 +55,43 @@ export default function SearchForm({
   onRemoveType,
   onReset,
   loading,
+  autoSearching,
 }: SearchFormProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const wasAutoSearchingRef = useRef(false);
+
   const selectedTypes = filters.types || [];
   const availableTypes = pokemonTypes.filter((t) => !selectedTypes.includes(t));
   const hasActiveFilters = !!(filters.query?.trim()) || selectedTypes.length > 0;
+
+  // Track when auto-searching starts and ends to maintain focus
+  useEffect(() => {
+    if (autoSearching && !wasAutoSearchingRef.current) {
+      // Auto-search just started
+      wasAutoSearchingRef.current = true;
+    } else if (!autoSearching && wasAutoSearchingRef.current) {
+      // Auto-search just finished - restore focus if the input was active
+      wasAutoSearchingRef.current = false;
+      if (inputRef.current && document.activeElement !== inputRef.current) {
+        // Small delay to ensure the DOM has updated
+        setTimeout(() => {
+          inputRef.current?.focus();
+        }, 0);
+      }
+    }
+  }, [autoSearching]);
+
+  const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onQueryChange(e.target.value);
+  };
+
+  const handleReset = () => {
+    onReset();
+    // Focus the input after reset
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 0);
+  };
 
   return (
     <Card className="mb-8">
@@ -68,16 +103,23 @@ export default function SearchForm({
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
               <Input
+                ref={inputRef}
                 type="text"
                 value={filters.query || ''}
-                onChange={(e) => onQueryChange(e.target.value)}
+                onChange={handleQueryChange}
                 placeholder="Search by name or ability..."
                 className="pl-10"
                 disabled={loading}
               />
+              {autoSearching && (
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin"></div>
+                </div>
+              )}
             </div>
             <p className="text-xs text-muted-foreground">
               Search updates automatically as you type
+              {autoSearching && <span className="text-blue-500"> • Searching...</span>}
             </p>
           </div>
 
@@ -138,7 +180,7 @@ export default function SearchForm({
           <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
             <Button
               variant="outline"
-              onClick={onReset}
+              onClick={handleReset}
               className="w-full sm:w-auto"
               disabled={loading}
             >

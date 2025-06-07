@@ -30,7 +30,7 @@ export default function HomePage() {
     resetSearch
   } = usePokemon();
 
-  // When filters change, trigger the hook’s search
+  // When filters change, trigger the hook's search
   useEffect(() => {
     search(filters);
   }, [filters]);
@@ -99,7 +99,8 @@ export default function HomePage() {
                 }));
               }}
               onReset={handleReset}
-              loading={loading || autoSearching}
+              loading={loading}
+              autoSearching={autoSearching} // Pass the autoSearching prop
             />
 
             {error && (
