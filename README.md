@@ -109,5 +109,11 @@ Open http://localhost:3000
 - Custom Hooks: Encapsulated complex logic for reusability and testing
 - Tailwind v4: Leveraged latest CSS features for modern styling
 
+##  Future Changes
+
+- Comparison Tool: Compare stats between multiple Pokémon
+- Team Builder: Create and save Pokémon teams
+- Dataset: Use a dataset with more robust features
+
 ## Acknowledgments
 Created by Alwyn
