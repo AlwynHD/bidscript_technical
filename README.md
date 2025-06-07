@@ -31,7 +31,7 @@ A modern, interactive Pokémon information portal built with Next.js that allows
   git clone https://github.com/yourusername/pokemon-portal.git
   cd pokemon-portal
 
-Install dependencies:
+2. **Install Dependencies:**
 bashnpm install
 # or
 yarn install
@@ -69,35 +69,35 @@ Project Structure
 │   │   ├── evolution-graph.ts    # Evolution tree algorithms
 │   │   └── evolution-tree-builder.ts
 │   └── types/           # TypeScript type definitions
-User Guide
-Navigation
+## User Guide
+## Navigation
 
 Landing Page: Introduction to the Pokédex
 Dashboard: Main browsing interface with search and filters
 Pokémon Details: Click any Pokémon card to view detailed information
 
-Search & Filter
+ ## Search & Filter
 
 Text Search: Search by Pokémon name or ability
 Type Filtering: Select up to 2 types to filter results
 Real-time Updates: Results update automatically as you type
 Clear Filters: Reset all search criteria with one click
 
-Favorites
+## Favorites
 
 Add to Favorites: Click the heart icon on any Pokémon card
 View Favorites: Switch to the Favorites tab in the dashboard
 Persistent Storage: Favorites are saved in browser local storage
 Bulk Clear: Remove all favorites at once
 
-Evolution Trees
+## Evolution Trees
 
 Linear Evolution: Simple evolution chains (e.g., Bulbasaur → Ivysaur → Venusaur)
 Branching Evolution: Multiple evolution paths (e.g., Poliwag → Poliwhirl → Poliwrath/Politoed)
 Complex Evolution: Many evolutions from one base (e.g., Eevee's multiple evolutions)
 Interactive Navigation: Click any Pokémon in the evolution tree to view its details
 
-API Routes
+## API Routes
 /api/poke_search
 
 Method: GET
@@ -165,7 +165,7 @@ Comparison Tool: Compare stats between multiple Pokémon
 Team Builder: Create and save Pokémon teams
 Battle Simulator: Simple type effectiveness calculator
 
-Technical Decisions
+## Technical Decisions
 
 Static Data: Used pre-loaded JSON for instant performance and offline capability
 Context for State: Chose Context API over external state management for simplicity
