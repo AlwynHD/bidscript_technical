@@ -45,13 +45,14 @@ const PokemonNode: React.FC<PokemonNodeProps> = ({
   };
 
   return (
-    <div
-      className={`
-        relative group cursor-pointer transition-all duration-200
-        ${isCurrent ? 'ring-2 ring-blue-500 ring-offset-2 rounded-lg scale-110' : 'hover:scale-105'}
-      `}
-      onClick={() => onClick(pokemon.id)}
-    >
+<div 
+  className={`relative overflow-hidden rounded-lg border-2 transition-all duration-200 hover:shadow-lg cursor-pointer ${
+    isCurrent 
+      ? 'border-blue-500 shadow-lg ring-2 ring-primary/20 m-1' // ← Added m-1 for ring spacing
+      : 'border-border hover:border-primary/50'
+  }`}
+  onClick={() => onClick?.(pokemon.id)}
+>
       <div className="text-center space-y-1 p-2">
         <div className={`relative ${sizeClasses[size]} mx-auto`}>
           <Image
@@ -75,9 +76,6 @@ const PokemonNode: React.FC<PokemonNodeProps> = ({
           ))}
         </div>
       </div>
-      {isCurrent && (
-        <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-white animate-pulse" />
-      )}
     </div>
   );
 };
