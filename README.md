@@ -27,18 +27,18 @@ A modern, interactive Pokémon information portal built with Next.js that allows
 ## Installation
 
 1. **Clone the repository:**
-  ```bash
+  ```
   git clone https://github.com/yourusername/pokemon-portal.git
   cd pokemon-portal
-
-2. **Install Dependencies:**
+  ```
+2. Install Dependencies:
 bashnpm install
 # or
 yarn install
 # or
 pnpm install
 
-Run the development server:
+3. Run the development server:
 bashnpm run dev
 or
 yarn dev
