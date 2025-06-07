@@ -21,7 +21,7 @@ A modern, interactive Pokémon information portal built with Next.js that allows
 - **UI Components**: Custom components with shadcn/ui patterns
 - **State Management**: React Context API, Custom hooks
 - **Data Source**: Static JSON with 800+ Pokémon
-- **Image Optimization**: Next.js Image component with fallbacks
+- **Image Optimization**: Next.js Image component with fallbacks (Removed due to Vercel Free Tier Limitations)
 - **Icons**: Lucide React, React Icons
 
 ## Installation
