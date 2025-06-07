@@ -3,7 +3,7 @@
 import React from 'react';
 
 interface EvolutionMethodProps {
-  method?: string;
+  method?: string | null;
 }
 
 const EvolutionMethod: React.FC<EvolutionMethodProps> = ({ method }) => {

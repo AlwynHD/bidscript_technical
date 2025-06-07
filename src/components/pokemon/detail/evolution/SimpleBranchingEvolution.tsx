@@ -15,7 +15,7 @@ const SimpleBranchingEvolution: React.FC<SimpleBranchingEvolutionProps> = ({
   root, 
   onPokemonClick 
 }) => {
-  const renderNode = (node: TreeNode, depth = 0): JSX.Element => {
+  const renderNode = (node: TreeNode, depth = 0): React.JSX.Element => {
     return (
       <div className="flex items-center gap-2">
         <div className="flex flex-col items-center">
