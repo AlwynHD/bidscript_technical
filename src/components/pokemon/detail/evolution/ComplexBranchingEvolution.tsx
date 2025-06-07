@@ -1,10 +1,11 @@
 'use client';
 
 import React from 'react';
-import { ArrowRight, GitBranch } from 'lucide-react';
+import { ArrowRight,  } from 'lucide-react';
 import PokemonNode from './PokemonNode';
 import EvolutionMethod from './EvolutionMethod';
 import type { TreeNode } from '@/lib/evolution-tree-builder';
+import { TbArrowsSplit } from "react-icons/tb";
 
 interface ComplexBranchingEvolutionProps {
   root: TreeNode;
@@ -86,7 +87,7 @@ const ComplexBranchingEvolution: React.FC<ComplexBranchingEvolutionProps> = ({
         {node.children.length > 0 && (
           <>
             <div className="flex items-center pt-8">
-              <GitBranch className="w-4 h-4 text-muted-foreground" />
+              <TbArrowsSplit className="w-4 h-4 text-muted-foreground" />
             </div>
             
             <div className="flex flex-col gap-4">
