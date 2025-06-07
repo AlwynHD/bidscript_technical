@@ -116,7 +116,7 @@ export default function PokemonProfile({ pokemon }: PokemonProfileProps) {
                 <Badge 
                   key={index}
                   variant={isHidden === 'true' ? 'default' : 'secondary'}
-                  className={`text-xs ${isHidden === 'true' ? 'bg-amber-500 hover:bg-amber-600 text-white' : ''}`}
+                  className={`text-xs ${isHidden === 'true' ? 'bg-amber-500  text-white' : ''}`}
                 >
                   {name}
                   {isHidden === 'true' && ' ★'}

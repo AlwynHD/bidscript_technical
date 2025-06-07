@@ -13,24 +13,24 @@ interface PokemonCardProps {
 }
 
 const typeColors: Record<string, string> = {
-  Normal: 'bg-gray-400 hover:bg-gray-500',
-  Fire: 'bg-red-500 hover:bg-red-600',
-  Water: 'bg-blue-500 hover:bg-blue-600',
-  Electric: 'bg-yellow-400 hover:bg-yellow-500',
-  Grass: 'bg-green-500 hover:bg-green-600',
-  Ice: 'bg-blue-200 hover:bg-blue-300',
-  Fighting: 'bg-red-700 hover:bg-red-800',
-  Poison: 'bg-purple-500 hover:bg-purple-600',
-  Ground: 'bg-yellow-600 hover:bg-yellow-700',
-  Flying: 'bg-indigo-400 hover:bg-indigo-500',
-  Psychic: 'bg-pink-500 hover:bg-pink-600',
-  Bug: 'bg-green-400 hover:bg-green-500',
-  Rock: 'bg-yellow-800 hover:bg-yellow-900',
-  Ghost: 'bg-purple-700 hover:bg-purple-800',
-  Dragon: 'bg-indigo-700 hover:bg-indigo-800',
-  Dark: 'bg-gray-800 hover:bg-gray-900',
-  Steel: 'bg-gray-500 hover:bg-gray-600',
-  Fairy: 'bg-pink-300 hover:bg-pink-400',
+  Normal: 'bg-gray-400',
+  Fire: 'bg-red-500',
+  Water: 'bg-blue-500',
+  Electric: 'bg-yellow-400',
+  Grass: 'bg-green-500',
+  Ice: 'bg-blue-200',
+  Fighting: 'bg-red-700',
+  Poison: 'bg-purple-500',
+  Ground: 'bg-yellow-600',
+  Flying: 'bg-indigo-400',
+  Psychic: 'bg-pink-500',
+  Bug: 'bg-green-400',
+  Rock: 'bg-yellow-800',
+  Ghost: 'bg-purple-700',
+  Dragon: 'bg-indigo-700',
+  Dark: 'bg-gray-800',
+  Steel: 'bg-gray-500',
+  Fairy: 'bg-pink-300',
 };
 
 export default function PokemonCard({ pokemon }: PokemonCardProps) {
@@ -105,7 +105,7 @@ export default function PokemonCard({ pokemon }: PokemonCardProps) {
               variant="secondary"
               className={`
                 text-white text-xs font-medium
-                ${typeColors[type] || 'bg-gray-400 hover:bg-gray-500'}
+                ${typeColors[type] || 'bg-gray-400 '}
               `}
             >
               {type}
