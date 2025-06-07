@@ -20,12 +20,14 @@ interface SearchFormProps {
   autoSearching?: boolean;
 }
 
+// Array of pokemon Types
 const pokemonTypes: PokemonType[] = [
   'Normal', 'Fire', 'Water', 'Electric', 'Grass', 'Ice',
   'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic',
   'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy'
 ];
 
+// Color with hover effects 
 const typeColors: Record<string, string> = {
   Normal: 'bg-gray-400 hover:bg-gray-500',
   Fire: 'bg-red-500 hover:bg-red-600',
