@@ -14,7 +14,7 @@ import PokemonBasicInfo from '@/components/pokemon/detail/PokemonBasicInfo';
 import PokemonDescription from '@/components/pokemon/detail/PokemonDescription';
 import PokemonStats from '@/components/pokemon/detail/PokemonStats';
 import PokemonProfile from '@/components/pokemon/detail/PokemonProfile';
-import PokemonEvolution from '@/components/pokemon/detail/PokemonEvolution';
+import PokemonEvolution from '@/components/pokemon/detail/evolution/PokemonEvolution';
 import LoadingSkeleton from '@/components/pokemon/detail/LoadingSkeleton';
 import PokemonError from '@/components/pokemon/detail/PokemonError';
 
@@ -70,8 +70,8 @@ export default function PokemonDetailPage({
           </Button>
         </div>
 
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {/* Main Pokemon Info Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
           {/* Left Column - Image & Basic Info */}
           <div className="space-y-4">
             <PokemonImage pokemon={pokemon} />
@@ -84,11 +84,15 @@ export default function PokemonDetailPage({
             <PokemonDescription pokemon={pokemon} />
           </div>
 
-          {/* Right Column - Profile & Evolution */}
+          {/* Right Column - Profile */}
           <div className="space-y-4">
             <PokemonProfile pokemon={pokemon} />
-            <PokemonEvolution pokemon={pokemon} />
           </div>
+        </div>
+
+        {/* Evolution Section - Full Width at Bottom */}
+        <div className="w-full">
+          <PokemonEvolution pokemon={pokemon} />
         </div>
       </div>
     </div>
